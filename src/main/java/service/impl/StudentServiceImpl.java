@@ -24,9 +24,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void update(Student student) {
-        try{
+        try {
             studentRepository.update(student);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occured while updating a student" + e.getMessage());
         }
 
@@ -34,18 +34,18 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void delete(Student student) {
-        try{
+        try {
             studentRepository.delete(student);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occured while deleting a student" + e.getMessage());
         }
     }
 
     @Override
     public Student findById(Long id) {
-        try{
+        try {
             return studentRepository.findById(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occured while finding a student" + e.getMessage());
         }
         return null;
@@ -53,9 +53,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> findAll() {
-        try{
+        try {
             return studentRepository.findAll();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occured while finding all students" + e.getMessage());
         }
         return null;
@@ -63,9 +63,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findByStudentId(Integer studentId) {
-        try{
+        try {
             return studentRepository.findByStudentId(studentId);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occured while finding a student" + e.getMessage());
         }
         return null;
@@ -73,10 +73,20 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findByNationalCode(Integer nationalCode) {
-        try{
+        try {
             return studentRepository.findByNationalCode(nationalCode);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("An error occured while finding a student" + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public Student login(String username, String password) {
+        try {
+            studentRepository.login(username, password);
+        } catch (Exception e) {
+            System.out.println("Login failed either username or password is incorrect " + e.getMessage());
         }
         return null;
     }

@@ -12,4 +12,6 @@ public interface StudentRepository extends BaseEntityRepository<Student> {
     Student findByStudentId(Integer studentId);
 
     Student findByNationalCode(Integer nationalCode);
+
+    Student login(String username, String password);
 }

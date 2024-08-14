@@ -40,5 +40,11 @@ public class StudentRepositoryImpl<T extends Student> extends BaseEntityReposito
         return query.getSingleResult();
     }
 
-
+    @Override
+    public Student login(String username, String password) {
+        TypedQuery<Student> query = em.createQuery("SELECT s FROM Student s WHERE s.username = :username and s.password = :password", Student.class);
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        return query.getSingleResult();
+    }
 }

@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import util.PassGenerator;
 
 @Getter
 @Setter
@@ -52,6 +53,16 @@ public class Person extends BaseEntity {
     @NotBlank
     @Size(min = 4, max = 7)
     private String birthDate;
+
+    @Column
+    @NotBlank
+    @Size(min = 4, max = 20)
+    private String username = nationalCode.toString();
+
+    @Column
+    @NotBlank
+    @Size(min = 8, max = 20)
+    private String password = new PassGenerator().generatePassword();
 
     @OneToOne(cascade = CascadeType.ALL)
     private CreditCard creditCard;

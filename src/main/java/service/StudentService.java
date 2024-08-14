@@ -18,4 +18,6 @@ public interface StudentService {
     Student findByStudentId(Integer studentId);
 
     Student findByNationalCode(Integer nationalCode);
+
+    Student login(String username,String password);
 }
