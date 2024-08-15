@@ -57,13 +57,25 @@ public class Person extends BaseEntity {
     @Column
     @NotBlank
     @Size(min = 4, max = 20)
-    private String username = nationalCode.toString();
+    private String username;
 
     @Column
     @NotBlank
     @Size(min = 8, max = 20)
-    private String password = new PassGenerator().generatePassword();
+    private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
     private CreditCard creditCard;
+
+    public Person(String firstName, String lastName, String fathersName, String mothersName, String certificateNumber, Integer nationalCode, String birthDate, String username, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.fathersName = fathersName;
+        this.mothersName = mothersName;
+        this.certificateNumber = certificateNumber;
+        this.nationalCode = nationalCode;
+        this.birthDate = birthDate;
+        this.username = username;
+        this.password = password;
+    }
 }

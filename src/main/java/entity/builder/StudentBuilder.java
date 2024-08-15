@@ -1,6 +1,7 @@
 package entity.builder;
 
 import entity.Student;
+import entity.University;
 import enumerations.EducationDegree;
 import enumerations.EducationStatus;
 
@@ -19,6 +20,7 @@ public class StudentBuilder implements Builder {
     private EducationDegree educationDegree;
     private EducationStatus educationStatus;
     private boolean usesDormitory;
+    private University university;
 
     @Override
     public StudentBuilder setFirstName(String firstName) {
@@ -104,7 +106,13 @@ public class StudentBuilder implements Builder {
         return this;
     }
 
+    @Override
+    public StudentBuilder setUniversity(University university) {
+        this.university = university;
+        return this;
+    }
+
     public Student build(){
-        return new Student(firstName,lastName,mothersName,fathersName,certificateNumber,nationalCode,birthDate,username,password,studentId,yearOfEnter,educationDegree,educationStatus,usesDormitory);
+        return new Student(firstName,lastName,mothersName,fathersName,certificateNumber,nationalCode,birthDate,username,password,studentId,yearOfEnter,educationDegree,educationStatus,usesDormitory,university);
     }
 }

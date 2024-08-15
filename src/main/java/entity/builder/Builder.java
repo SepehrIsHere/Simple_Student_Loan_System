@@ -1,5 +1,6 @@
 package entity.builder;
 
+import entity.University;
 import enumerations.EducationDegree;
 import enumerations.EducationStatus;
 
@@ -32,4 +33,5 @@ public interface Builder {
 
     StudentBuilder setUsesDormitory(boolean usesDormitory);
 
+    StudentBuilder setUniversity(University university);
 }
