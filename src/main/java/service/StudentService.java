@@ -19,5 +19,7 @@ public interface StudentService {
 
     Student findByNationalCode(Integer nationalCode);
 
-    Student login(String username,String password);
+    Student findByFirstNameAndLastName(String firstName, String lastName);
+
+    Student login(Student student);
 }

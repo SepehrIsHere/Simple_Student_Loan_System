@@ -82,9 +82,19 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student login(String username, String password) {
+    public Student findByFirstNameAndLastName(String firstName, String lastName) {
         try {
-            studentRepository.login(username, password);
+            return studentRepository.findByFirstNameAndLastName(firstName, lastName);
+        } catch (Exception e) {
+            System.out.println("An error occured while finding a student" + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public Student login(Student student) {
+        try {
+            studentRepository.login(student.getUsername(), student.getPassword());
         } catch (Exception e) {
             System.out.println("Login failed either username or password is incorrect " + e.getMessage());
         }

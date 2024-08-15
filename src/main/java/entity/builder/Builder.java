@@ -31,6 +31,8 @@ public interface Builder {
 
     StudentBuilder setEducationStatus(EducationStatus educationStatus);
 
+    StudentBuilder setIsEngaged(Boolean isEngaged);
+
     StudentBuilder setUsesDormitory(boolean usesDormitory);
 
     StudentBuilder setUniversity(University university);

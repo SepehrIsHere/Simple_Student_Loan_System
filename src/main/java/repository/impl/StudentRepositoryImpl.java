@@ -41,6 +41,14 @@ public class StudentRepositoryImpl<T extends Student> extends BaseEntityReposito
     }
 
     @Override
+    public Student findByFirstNameAndLastName(String firstName, String lastName) {
+        TypedQuery<Student> query = em.createQuery("SELECT s FROM Student s where s.firstName = :firstName and s.lastName = :lastName", Student.class);
+        query.setParameter("firstName", firstName);
+        query.setParameter("lastName", lastName);
+        return query.getSingleResult();
+    }
+
+    @Override
     public Student login(String username, String password) {
         TypedQuery<Student> query = em.createQuery("SELECT s FROM Student s WHERE s.username = :username and s.password = :password", Student.class);
         query.setParameter("username", username);

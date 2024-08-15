@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import jakarta.ws.rs.DefaultValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import util.PassGenerator;
 
 @Getter
 @Setter
@@ -64,10 +64,15 @@ public class Person extends BaseEntity {
     @Size(min = 8, max = 20)
     private String password;
 
+    @Column
+    @NotBlank
+    @DefaultValue("false")
+    private boolean isEngaged;
+
     @OneToOne(cascade = CascadeType.ALL)
     private CreditCard creditCard;
 
-    public Person(String firstName, String lastName, String fathersName, String mothersName, String certificateNumber, Integer nationalCode, String birthDate, String username, String password) {
+    public Person(String firstName, String lastName, String fathersName, String mothersName, String certificateNumber, Integer nationalCode, String birthDate, String username, String password,boolean isEngaged) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.fathersName = fathersName;
@@ -77,5 +82,6 @@ public class Person extends BaseEntity {
         this.birthDate = birthDate;
         this.username = username;
         this.password = password;
+        this.isEngaged = isEngaged;
     }
 }

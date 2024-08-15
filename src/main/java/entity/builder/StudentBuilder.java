@@ -19,6 +19,7 @@ public class StudentBuilder implements Builder {
     private Integer yearOfEnter;
     private EducationDegree educationDegree;
     private EducationStatus educationStatus;
+    private boolean isEngaged;
     private boolean usesDormitory;
     private University university;
 
@@ -101,6 +102,12 @@ public class StudentBuilder implements Builder {
     }
 
     @Override
+    public StudentBuilder setIsEngaged(Boolean isEngaged) {
+        this.isEngaged = isEngaged;
+        return this;
+    }
+
+    @Override
     public StudentBuilder setUsesDormitory(boolean usesDormitory) {
         this.usesDormitory = usesDormitory;
         return this;
@@ -113,6 +120,6 @@ public class StudentBuilder implements Builder {
     }
 
     public Student build(){
-        return new Student(firstName,lastName,mothersName,fathersName,certificateNumber,nationalCode,birthDate,username,password,studentId,yearOfEnter,educationDegree,educationStatus,usesDormitory,university);
+        return new Student(firstName,lastName,mothersName,fathersName,certificateNumber,nationalCode,birthDate,username,password,isEngaged,studentId,yearOfEnter,educationDegree,educationStatus,usesDormitory,university);
     }
 }
