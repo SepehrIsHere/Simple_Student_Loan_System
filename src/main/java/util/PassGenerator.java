@@ -1,5 +1,6 @@
 package util;
 
+import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
@@ -15,7 +16,19 @@ public class PassGenerator {
         CharacterRule DR = new CharacterRule(EnglishCharacterData.Digit);
         DR.setNumberOfCharacters(1);
 
-        CharacterRule SR = new CharacterRule(EnglishCharacterData.Special);
+        CharacterData specialChars = new CharacterData() {
+            @Override
+            public String getErrorCode() {
+                return "ERROR_SPECIAL_CHAR";
+            }
+
+            @Override
+            public String getCharacters() {
+                return "@#$%&";
+            }
+        };
+
+        CharacterRule SR = new CharacterRule(specialChars);
         SR.setNumberOfCharacters(1);
 
         PasswordGenerator pg = new PasswordGenerator();
