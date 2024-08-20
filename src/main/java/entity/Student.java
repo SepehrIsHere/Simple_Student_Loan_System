@@ -44,11 +44,9 @@ public class Student extends Person {
     private boolean usesDormitory;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @Column
     private University university;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @Column
     private List<Loan> loan;
 
     public Student(@NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String firstName, @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String lastName, @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String fathersName, @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String mothersName, @NotBlank @Size(min = 3, max = 20) String certificateNumber, @NotBlank Integer nationalCode, @NotBlank @Size(min = 4, max = 7) String birthDate, @NotBlank @Size(min = 4, max = 20) String username, @NotBlank @Size(min = 8, max = 20) String password, boolean isEngaged ,Integer studentId, Integer yearOfEnter, EducationDegree educationDegree, EducationStatus educationStatus, boolean usesDormitory,University university) {

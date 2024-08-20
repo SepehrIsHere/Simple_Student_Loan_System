@@ -6,5 +6,6 @@ public enum EducationDegree {
     ASSOCIATE,
     MASTER_PEYVASTE,
     MASTER_NAPEYVASTE,
-    PHD
+    PHD_PEYVASTER,
+    PHD_NAPEYVASTE
 }

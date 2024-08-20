@@ -34,7 +34,7 @@ public class CreditCard extends BaseEntity {
     @NotBlank
     @Size(min = 12, max = 16)
     @DefaultValue("000000000000")
-    private Integer cardNumber;
+    private String cardNumber;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Student student;
