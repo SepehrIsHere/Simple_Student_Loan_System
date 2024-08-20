@@ -5,6 +5,8 @@ import entity.Student;
 import java.util.List;
 
 public interface StudentService {
+    Student save(Student student);
+
     void add(Student student);
 
     void update(Student student);
@@ -21,5 +23,5 @@ public interface StudentService {
 
     Student findByFirstNameAndLastName(String firstName, String lastName);
 
-    Student login(Student student);
+    Student login (String username, String password);
 }

@@ -5,6 +5,8 @@ import entity.Student;
 import java.util.List;
 
 public interface StudentRepository extends BaseEntityRepository<Student> {
+    Student save(Student student);
+
     List<Student> findAll();
 
     Student findById(Long id);
@@ -16,4 +18,5 @@ public interface StudentRepository extends BaseEntityRepository<Student> {
     Student findByNationalCode(Integer nationalCode);
 
     Student login(String username, String password);
+
 }

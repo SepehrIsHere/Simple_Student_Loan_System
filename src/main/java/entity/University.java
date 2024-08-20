@@ -1,5 +1,6 @@
 package entity;
 
+import enumerations.Province;
 import enumerations.UniversityType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -21,11 +22,12 @@ public class University extends BaseEntity{
     private String name;
 
     @Column
+    @NotBlank
     @Enumerated(EnumType.STRING)
-    private UniversityType universityType;  
+    private UniversityType universityType;
 
-    @Column
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+    @NotBlank
+    @Enumerated(EnumType.STRING)
+    private Province province;
+
 }

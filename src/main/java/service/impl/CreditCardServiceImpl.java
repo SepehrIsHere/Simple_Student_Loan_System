@@ -80,4 +80,15 @@ public class CreditCardServiceImpl implements CreditCardService {
         }
         return null;
     }
+
+    @Override
+    public CreditCard findByCardNumberAndCvv2(String cardNumber, Integer cvv2) {
+        try {
+            return creditCardRepository.findByCardNumberAndCvv2(cardNumber, cvv2);
+        } catch (NullPointerException e) {
+            System.out.println("Credit card does not exist or something went wrong " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

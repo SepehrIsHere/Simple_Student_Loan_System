@@ -19,4 +19,6 @@ public interface CreditCardService {
     CreditCard findByCardNumber(Integer cardNumber);
 
     CreditCard findByStudent(Student student);
+
+    CreditCard findByCardNumberAndCvv2(String cardNumber, Integer cvv2);
 }

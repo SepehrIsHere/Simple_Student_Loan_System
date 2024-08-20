@@ -41,4 +41,12 @@ public class CreditCardRepositoryImpl<T extends CreditCard> extends BaseEntityRe
         query.setParameter("student", student);
         return query.getSingleResult();
     }
+
+    @Override
+    public CreditCard findByCardNumberAndCvv2(String cardNumber, Integer cvv2) {
+        TypedQuery<CreditCard> query = em.createQuery("SELECT c FROM CreditCard c WHERE c.cardNumber = :cardNumber AND c.cvv2 = :cvv2", CreditCard.class);
+        query.setParameter("cardNumber", cardNumber);
+        query.setParameter("cvv2", cvv2);
+        return query.getSingleResult();
+    }
 }

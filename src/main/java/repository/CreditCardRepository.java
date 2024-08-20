@@ -13,4 +13,6 @@ public interface CreditCardRepository extends BaseEntityRepository<CreditCard> {
     CreditCard findByCardNumber(Integer cardNumber);
 
     CreditCard findByStudent(Student student);
+
+    CreditCard findByCardNumberAndCvv2(String cardNumber, Integer cvv2);
 }

@@ -1,6 +1,7 @@
 package service.impl;
 
 import entity.Student;
+import jakarta.validation.ConstraintViolationException;
 import repository.StudentRepository;
 import service.StudentService;
 
@@ -14,10 +15,20 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student save(Student student) {
+        try {
+            return studentRepository.save(student);
+        } catch (ConstraintViolationException e) {
+            System.out.println("ConstraintViolationException" + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
     public void add(Student student) {
         try {
             studentRepository.add(student);
-        } catch (Exception e) {
+        } catch (ConstraintViolationException e) {
             System.out.println("An error occured while adding a student" + e.getMessage());
         }
     }
@@ -92,11 +103,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student login(Student student) {
+    public Student login(String username, String password) {
         try {
-            studentRepository.login(student.getUsername(), student.getPassword());
+          return studentRepository.login(username, password);
         } catch (Exception e) {
-            System.out.println("Login failed either username or password is incorrect " + e.getMessage());
+           e.printStackTrace();
         }
         return null;
     }

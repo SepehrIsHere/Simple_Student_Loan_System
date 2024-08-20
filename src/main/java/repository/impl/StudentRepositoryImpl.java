@@ -2,6 +2,8 @@ package repository.impl;
 
 import entity.Student;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import repository.StudentRepository;
 
@@ -13,6 +15,15 @@ public class StudentRepositoryImpl<T extends Student> extends BaseEntityReposito
     public StudentRepositoryImpl(EntityManager em) {
         super(em);
         this.em = em;
+    }
+
+    @Override
+    public Student save(Student student) {
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        em.persist(student);
+        transaction.commit();
+        return student;
     }
 
     @Override
@@ -50,9 +61,10 @@ public class StudentRepositoryImpl<T extends Student> extends BaseEntityReposito
 
     @Override
     public Student login(String username, String password) {
-        TypedQuery<Student> query = em.createQuery("SELECT s FROM Student s WHERE s.username = :username and s.password = :password", Student.class);
+        TypedQuery<Student> query = em.createQuery("SELECT s from Student s where s.username = :username and s.password = :password", Student.class);
         query.setParameter("username", username);
         query.setParameter("password", password);
         return query.getSingleResult();
     }
+
 }
