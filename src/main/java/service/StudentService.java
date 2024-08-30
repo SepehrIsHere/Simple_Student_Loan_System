@@ -24,4 +24,6 @@ public interface StudentService {
     Student findByFirstNameAndLastName(String firstName, String lastName);
 
     Student login (String username, String password);
+
+    Boolean studentExists(String firstName, String lastName);
 }

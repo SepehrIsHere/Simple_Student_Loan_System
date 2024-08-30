@@ -2,8 +2,9 @@ package service;
 
 import entity.Loan;
 import entity.Student;
-import enumerations.EducationDegree;
+import enumerations.LoanType;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface LoanService {
@@ -19,5 +20,12 @@ public interface LoanService {
 
     List<Loan> findByStudent(Student student);
 
-    List<Loan> findByDegree(EducationDegree degree);
+    List<Loan> findByStudentAndLoanType(Student student, LoanType type);
+
+    List<Loan> findByStudentAndTypeAndYear(Student student, LoanType type, Integer year);
+
+    Loan findByStudentMonthYearAndType(Student student, LoanType type, Integer month, Integer year);
+
+    Loan findByStudentAndLoanTypeAndYear(Student student, LoanType type, Integer year);
+
 }

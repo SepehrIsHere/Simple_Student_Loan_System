@@ -1,6 +1,7 @@
 package service.impl;
 
 import entity.Couples;
+import entity.Student;
 import repository.CouplesRepository;
 import service.CouplesService;
 
@@ -57,6 +58,17 @@ public class CouplesServiceImpl implements CouplesService {
     public Couples findById(Long id) {
         try {
             return couplesRepository.findById(id);
+        } catch (Exception e) {
+            System.out.println("An error occured while finding couples" + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Couples findByFirstStudentAndSecondStudent(Student firstStudent, Student secondStudent) {
+        try {
+            return couplesRepository.findByFirstStudentAndSecondStudent(firstStudent, secondStudent);
         } catch (Exception e) {
             System.out.println("An error occured while finding couples" + e.getMessage());
             e.printStackTrace();

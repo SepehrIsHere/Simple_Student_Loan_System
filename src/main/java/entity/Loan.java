@@ -6,11 +6,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Date;
 
 
 @AllArgsConstructor
@@ -30,13 +33,20 @@ public class Loan extends BaseEntity {
     private LoanType loanType;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Term term;
+    @Column
+    private LocalDate date;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private LoanStatus loanStatus;
+    @Column
+    private Integer year;
+
+    @NotNull
+    @Column
+    private Integer month;
+
+    @Column
+    @NotNull
+    private String loanNumber;
 
     @NotBlank
     @ManyToOne(cascade = CascadeType.ALL)

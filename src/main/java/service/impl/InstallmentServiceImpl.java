@@ -1,6 +1,8 @@
 package service.impl;
 
 import entity.Installment;
+import enumerations.InstallmentStatus;
+import enumerations.LoanType;
 import repository.InstallmentRepository;
 import service.InstallmentService;
 
@@ -18,7 +20,7 @@ public class InstallmentServiceImpl implements InstallmentService {
         try {
             installmentRepository.add(installment);
         } catch (Exception e) {
-            System.out.println("An error occured while adding the installment" + e.getMessage());
+            System.out.println("An error occured while adding the installment " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -28,7 +30,7 @@ public class InstallmentServiceImpl implements InstallmentService {
         try {
             installmentRepository.update(installment);
         } catch (Exception e) {
-            System.out.println("An error occured while updating the installment" + e.getMessage());
+            System.out.println("An error occured while updating the installment " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -38,7 +40,7 @@ public class InstallmentServiceImpl implements InstallmentService {
         try {
             installmentRepository.delete(installment);
         } catch (Exception e) {
-            System.out.println("An error occured while deleting the installment" + e.getMessage());
+            System.out.println("An error occured while deleting the installment " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -48,7 +50,7 @@ public class InstallmentServiceImpl implements InstallmentService {
         try {
             return installmentRepository.findAll();
         } catch (Exception e) {
-            System.out.println("An error occured while finding the installments" + e.getMessage());
+            System.out.println("An error occured while finding the installments " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -59,7 +61,29 @@ public class InstallmentServiceImpl implements InstallmentService {
         try {
             return installmentRepository.findById(id);
         } catch (Exception e) {
-            System.out.println("An error occured while finding the installment" + e.getMessage());
+            System.out.println("An error occured while finding the installment " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Installment> findByLoanTypeAndPaymentStatus(LoanType loanType, InstallmentStatus installmentStatus) {
+        try {
+            return installmentRepository.findByLoanTypeAndPaymentStatus(loanType, installmentStatus);
+        } catch (Exception e) {
+            System.out.println("An error occured while finding the installments " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Long findInstallmentCountByLoanTypeAndPaymentStatus(LoanType loanType, InstallmentStatus installmentStatus) {
+        try {
+            return installmentRepository.findInstallmentCountByLoanTypeAndPaymentStatus(loanType, installmentStatus);
+        } catch (Exception e) {
+            System.out.println("An error occured while finding the installments " + e.getMessage());
             e.printStackTrace();
         }
         return null;

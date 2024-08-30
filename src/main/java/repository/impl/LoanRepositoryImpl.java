@@ -2,12 +2,12 @@ package repository.impl;
 
 import entity.Loan;
 import entity.Student;
-import entity.University;
-import enumerations.EducationDegree;
+import enumerations.LoanType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import repository.LoanRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class LoanRepositoryImpl<T extends Loan> extends BaseEntityRepositoryImpl<Loan> implements LoanRepository {
@@ -36,10 +36,49 @@ public class LoanRepositoryImpl<T extends Loan> extends BaseEntityRepositoryImpl
         return query.getResultList();
     }
 
+
     @Override
-    public List<Loan> findByDegree(EducationDegree degree) {
-        TypedQuery<Loan> query = em.createQuery("SELECT l FROM Loan l WHERE l.student.educationDegree = :degree", Loan.class);
-        query.setParameter("degree", degree);
+    public List<Loan> findByStudentAndLoanType(Student student, LoanType type) {
+        TypedQuery<Loan> query = em.createQuery("from Loan l WHERE l.student = :student and l.loanType = :type", Loan.class);
+        query.setParameter("student", student);
+        query.setParameter("type", type);
         return query.getResultList();
+    }
+
+    @Override
+    public Loan findStudentLoanByDateAndType(Student student, LocalDate date, LoanType type) {
+        TypedQuery<Loan> query = em.createQuery("select l from Loan l  WHERE l.student = :student and l.date = :date and l.loanType = :type", Loan.class);
+        query.setParameter("student", student);
+        query.setParameter("date", date);
+        query.setParameter("type", type);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public List<Loan> findByStudentAndTypeAndYear(Student student, LoanType type, Integer year) {
+        TypedQuery<Loan> query = em.createQuery("SELECT l FROM Loan l where l.student = :student AND l.loanType = :loanType AND l.year = :year", Loan.class);
+        query.setParameter("student", student);
+        query.setParameter("loanType", type);
+        query.setParameter("year", year);
+        return query.getResultList();
+    }
+
+    @Override
+    public Loan findByStudentMonthYearAndType(Student student, LoanType type, Integer month, Integer year) {
+        TypedQuery<Loan> query = em.createQuery("SELECT l from Loan l where l.student = :student and l.loanType = :loanType and l.year = :year and l.month = :month", Loan.class);
+        query.setParameter("student", student);
+        query.setParameter("loanType", type);
+        query.setParameter("month", month);
+        query.setParameter("year", year);
+        return query.getSingleResult();
+    }
+
+    @Override
+    public Loan findByStudentAndLoanTypeAndYear(Student student, LoanType type, Integer year) {
+        TypedQuery<Loan> query = em.createQuery("SELECT l from Loan l where l.student = :student AND l.loanType = :loanType and l.year = :year", Loan.class);
+        query.setParameter("student", student);
+        query.setParameter("loanType", type);
+        query.setParameter("year", year);
+        return query.getSingleResult();
     }
 }

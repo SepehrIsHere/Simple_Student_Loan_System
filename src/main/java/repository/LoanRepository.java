@@ -2,9 +2,9 @@ package repository;
 
 import entity.Loan;
 import entity.Student;
-import entity.University;
-import enumerations.EducationDegree;
+import enumerations.LoanType;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface LoanRepository extends BaseEntityRepository<Loan> {
@@ -14,5 +14,14 @@ public interface LoanRepository extends BaseEntityRepository<Loan> {
 
     List<Loan> findByStudent(Student student);
 
-    List<Loan> findByDegree(EducationDegree degree);
+    List<Loan> findByStudentAndLoanType(Student student, LoanType type);
+
+    Loan findStudentLoanByDateAndType(Student student, LocalDate date, LoanType type);
+
+    List<Loan> findByStudentAndTypeAndYear(Student student, LoanType type, Integer year);
+
+    Loan findByStudentAndLoanTypeAndYear(Student student, LoanType type, Integer year);
+
+    Loan findByStudentMonthYearAndType(Student student, LoanType type, Integer month, Integer year);
+
 }

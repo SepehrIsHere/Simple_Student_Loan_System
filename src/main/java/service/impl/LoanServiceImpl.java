@@ -2,10 +2,11 @@ package service.impl;
 
 import entity.Loan;
 import entity.Student;
-import enumerations.EducationDegree;
+import enumerations.LoanType;
 import repository.LoanRepository;
 import service.LoanService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class LoanServiceImpl implements LoanService {
@@ -73,11 +74,45 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public List<Loan> findByDegree(EducationDegree degree) {
+    public List<Loan> findByStudentAndLoanType(Student student, LoanType type) {
         try {
-            return loanRepository.findByDegree(degree);
+            return loanRepository.findByStudentAndLoanType(student, type);
         } catch (Exception e) {
             System.out.println("An error occured while finding all loans" + e.getMessage());
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<Loan> findByStudentAndTypeAndYear(Student student, LoanType type, Integer year) {
+        try {
+            return loanRepository.findByStudentAndTypeAndYear(student, type, year);
+        } catch (Exception e) {
+            System.out.println("An error occured while finding the loan " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Loan findByStudentMonthYearAndType(Student student, LoanType type, Integer month, Integer year) {
+        try {
+            return loanRepository.findByStudentMonthYearAndType(student, type, month, year);
+        } catch (Exception e) {
+            System.out.println("An error occured while finding loan " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Loan findByStudentAndLoanTypeAndYear(Student student, LoanType type, Integer year) {
+        try {
+            return loanRepository.findByStudentAndLoanTypeAndYear(student, type, year);
+        } catch (Exception e) {
+            System.out.println("An error occured while finding the loan " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }

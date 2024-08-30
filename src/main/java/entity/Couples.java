@@ -18,11 +18,11 @@ import lombok.Setter;
 public class Couples extends BaseEntity {
     @NotNull
     @OneToOne
-    private Student husbandStudent;
+    private Student firstStudent;
 
     @NotNull
     @OneToOne
-    private Student wifeStudent;
+    private Student secondStudent;
 
     @NotNull
     @Size(min = 3 , max = 7)

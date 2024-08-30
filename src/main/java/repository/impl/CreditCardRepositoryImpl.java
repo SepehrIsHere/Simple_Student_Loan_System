@@ -4,6 +4,7 @@ import entity.BaseEntity;
 import entity.CreditCard;
 import entity.Student;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import repository.CreditCardRepository;
 
@@ -44,9 +45,14 @@ public class CreditCardRepositoryImpl<T extends CreditCard> extends BaseEntityRe
 
     @Override
     public CreditCard findByCardNumberAndCvv2(String cardNumber, Integer cvv2) {
-        TypedQuery<CreditCard> query = em.createQuery("SELECT c FROM CreditCard c WHERE c.cardNumber = :cardNumber AND c.cvv2 = :cvv2", CreditCard.class);
-        query.setParameter("cardNumber", cardNumber);
-        query.setParameter("cvv2", cvv2);
-        return query.getSingleResult();
+        try {
+            TypedQuery<CreditCard> query = em.createQuery("SELECT c FROM CreditCard c WHERE c.cardNumber = :cardNumber AND c.cvv2 = :cvv2", CreditCard.class);
+            query.setParameter("cardNumber", cardNumber);
+            query.setParameter("cvv2", cvv2);
+            return query.getSingleResult();
+        }catch (NoResultException e){
+            System.out.println("The card dose not exist !");
+        }
+        return null;
     }
 }

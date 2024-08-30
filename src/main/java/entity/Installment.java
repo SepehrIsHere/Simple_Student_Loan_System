@@ -1,13 +1,8 @@
 package entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
+import enumerations.InstallmentStatus;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.ws.rs.DefaultValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,25 +15,35 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Installment extends BaseEntity{
-    @Column
-    @NotNull
-    @Size(min = 6,max = 9)
-    @DefaultValue("0")
-    private Double amount;
+public class Installment extends BaseEntity {
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "loan_id")
+    @NotNull
     private Loan loan;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private CreditCard creditCard;
+    @Column
+    @NotNull
+    private Double totalAmount;
 
     @Column
     @NotNull
-    @DefaultValue("false")
-    private boolean paymentStatus;
+    private Double paidAmount;
+
+    @Column(name = "installment_number")
+    @NotNull
+    private Integer installmentNumber;
 
     @Column
     @NotNull
-    private LocalDate paymentDate;
+    private LocalDate payedDate;
+
+    @Column
+    @NotNull
+    private LocalDate dueDate;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private InstallmentStatus installmentStatus;
+
 }

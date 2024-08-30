@@ -1,6 +1,7 @@
 package service.impl;
 
 import entity.Student;
+import jakarta.persistence.NoResultException;
 import jakarta.validation.ConstraintViolationException;
 import repository.StudentRepository;
 import service.StudentService;
@@ -105,10 +106,22 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student login(String username, String password) {
         try {
-          return studentRepository.login(username, password);
-        } catch (Exception e) {
-           e.printStackTrace();
+            return studentRepository.login(username, password);
+        } catch (NoResultException e) {
+            System.out.println("Student dosent exist or username or password is incorrect ! ");
         }
         return null;
+    }
+
+    @Override
+    public Boolean studentExists(String firstName, String lastName) {
+        try {
+            Student student = studentRepository.findByFirstNameAndLastName(firstName, lastName);
+            return student != null;
+        } catch (Exception e) {
+            System.out.println("An error occured while finding a student" + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
     }
 }

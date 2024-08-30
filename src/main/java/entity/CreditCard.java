@@ -36,6 +36,10 @@ public class CreditCard extends BaseEntity {
     @DefaultValue("000000000000")
     private String cardNumber;
 
+    @Column
+    @NotBlank
+    private String expirationDate;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Student student;
 }
