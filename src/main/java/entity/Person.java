@@ -50,6 +50,11 @@ public class Person extends BaseEntity {
     private Integer nationalCode;
 
     @Column
+    @NotNull
+    @Size(min = 1, max = 1)
+    private Character gender;
+
+    @Column
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Must contain only letters and spaces")
     @Size(min = 2, max = 30, message = "Name must be between 2 and 30 characters")

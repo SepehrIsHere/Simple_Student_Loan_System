@@ -3,6 +3,7 @@ package menu;
 import entity.Student;
 
 public class MainMenu {
+
     private Student token;
     private final LoginMenu loginMenu;
     private final StudentMenu studentMenu;;
@@ -14,10 +15,10 @@ public class MainMenu {
 
     public void showLoginMenu(){
         while(true){
-            loginMenu.showMenu();
+            loginMenu.dateFinder();
             token = loginMenu.getToken();
             if(token != null){
-               // studentMenu.showMenu(token);
+                studentMenu.showMenu(token);
                 token = null;
             }else {
                 break;

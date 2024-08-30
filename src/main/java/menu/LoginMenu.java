@@ -9,10 +9,16 @@ import service.StudentService;
 import service.UniversityService;
 import util.PassGenerator;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class LoginMenu {
+    @Getter
+    private LocalDate date;
     @Getter
     private Student token = null;
     private final StudentService studentService;
@@ -21,6 +27,33 @@ public class LoginMenu {
     public LoginMenu(StudentService studentService, UniversityService universityService) {
         this.studentService = studentService;
         this.universityService = universityService;
+    }
+
+
+    public void dateFinder() {
+        Scanner scanner = new Scanner(System.in);
+        date = null;
+        while (date == null) {
+            System.out.println("Enter a date (yyyy-MM-dd) to simulate or leave empty to use the current date:");
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                date = LocalDate.now();
+            } else {
+                String datePattern = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";
+                if (input.matches(datePattern)) {
+                    try {
+                        date = LocalDate.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Invalid date. Please try again.");
+                    }
+                } else {
+                    System.out.println("Invalid date format. Please enter the date in yyyy-MM-dd format.");
+                    dateFinder();
+                }
+            }
+            showMenu();
+        }
     }
 
     public void showMenu() {
@@ -51,11 +84,8 @@ public class LoginMenu {
         String username = input.nextLine();
         System.out.println("Enter password: ");
         String password = input.nextLine();
-//        Student student = new Student();
-//        student.setUsername(username);
-//        student.setPassword(password);
 
-        token = studentService.login(username,password);
+        token = studentService.login(username, password);
         if (token == null || token.getId() == null) {
             System.out.println("Invalid username or password");
             return false;
@@ -124,8 +154,23 @@ public class LoginMenu {
                 student.setNationalCode(nationalCode);
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input");
+
             }
 
+            while (true) {
+                System.out.println("Enter Gender : ");
+                Character gender = input.next().charAt(0);
+                if (gender.toString().equalsIgnoreCase("m")) {
+                    gender = 'm';
+                    student.setGender(gender);
+                    break;
+                } else if (gender.toString().equalsIgnoreCase("f")) {
+                    gender = 'f';
+                    student.setGender(gender);
+                    break;
+                }
+                System.out.println("Invalid input . For male enter (m) and for female enter (f)");
+            }
             input.nextLine();
             while (true) {
                 System.out.println("Enter birthDate (format: DD-MM-YYYY): ");
@@ -161,18 +206,16 @@ public class LoginMenu {
             int choice = input.nextInt();
             input.nextLine();
 
-            EducationDegree educationDegree = null;
             switch (choice) {
-                case 1 -> educationDegree = EducationDegree.BACHELOR_PEYVASTE;
-                case 2 -> educationDegree = EducationDegree.BACHELOR_NAPEYVASTE;
-                case 3 -> educationDegree = EducationDegree.ASSOCIATE;
-                case 4 -> educationDegree = EducationDegree.MASTER_PEYVASTE;
-                case 5 -> educationDegree = EducationDegree.MASTER_NAPEYVASTE;
-                case 6 -> educationDegree = EducationDegree.PHD_PEYVASTER;
-                case 7 -> educationDegree = EducationDegree.PHD_NAPEYVASTE;
+                case 1 -> student.setEducationDegree(EducationDegree.BACHELOR_PEYVASTE);
+                case 2 -> student.setEducationDegree(EducationDegree.BACHELOR_NAPEYVASTE);
+                case 3 -> student.setEducationDegree(EducationDegree.ASSOCIATE);
+                case 4 -> student.setEducationDegree(EducationDegree.MASTER_PEYVASTE);
+                case 5 -> student.setEducationDegree(EducationDegree.MASTER_NAPEYVASTE);
+                case 6 -> student.setEducationDegree(EducationDegree.PHD_PEYVASTER);
+                case 7 -> student.setEducationDegree(EducationDegree.PHD_NAPEYVASTE);
                 default -> System.out.println("Invalid choice");
             }
-            student.setEducationDegree(educationDegree);
 
             System.out.println("""
                     What is your educational Status ?
@@ -182,33 +225,19 @@ public class LoginMenu {
             choice = input.nextInt();
             input.nextLine();
 
-            EducationStatus educationStatus = null;
             switch (choice) {
-                case 1 -> educationStatus = EducationStatus.GRADUATED;
-                case 2 -> educationStatus = EducationStatus.NOT_GRADUATED;
+                case 1 -> student.setEducationStatus(EducationStatus.GRADUATED);
+                case 2 -> student.setEducationStatus(EducationStatus.NOT_GRADUATED);
                 default -> System.out.println("Invalid choice");
             }
-            student.setEducationDegree(educationDegree);
 
             System.out.println("Are you engaged ? ");
             String answer = input.nextLine();
-            boolean isEngaged = false;
-            if (answer.equalsIgnoreCase("Yes")) {
-                isEngaged = true;
-            } else {
-                isEngaged = false;
-            }
-            student.setEngaged(isEngaged);
+            student.setEngaged(answer.equalsIgnoreCase("Yes"));
 
             System.out.println("Do you use Dormitory ? ");
             answer = input.nextLine();
-            boolean useDormitory = false;
-            if (answer.equalsIgnoreCase("Yes")) {
-                isEngaged = true;
-            } else {
-                isEngaged = false;
-            }
-            student.setUsesDormitory(useDormitory);
+            student.setUsesDormitory(answer.equalsIgnoreCase("Yes"));
 
             System.out.println("Enter the name of university : ");
             String universityName = input.nextLine();
@@ -224,15 +253,33 @@ public class LoginMenu {
             assert nationalCode != null;
             String username = nationalCode.toString();
             student.setUsername(username);
-
-
-            token = studentService.save(student);
-            return token != null;
+            if (doesStudentAlreadyExist(student)) {
+                System.out.println("Student Already exists");
+                showMenu();
+            } else {
+                token = studentService.save(student);
+                System.out.println("Your username is : " + token.getUsername());
+                System.out.println("Your password is : " + token.getPassword());
+                return token != null;
+            }
         } catch (InputMismatchException e) {
             System.out.println("Invalid Input!");
         }
+
         return token != null;
     }
 
+    private boolean doesStudentAlreadyExist(Student student) {
+        List<Student> students = studentService.findAll();
+        for (Student s : students) {
+            if (s.getFirstName().equals(student.getFirstName()) && s.getLastName().equals(student.getLastName()) && s.getNationalCode().equals(student.getNationalCode()) ||
+                    s.getFirstName().equals(student.getFirstName()) && s.getLastName().equals(student.getLastName())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
 
 }

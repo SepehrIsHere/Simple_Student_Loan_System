@@ -3,6 +3,7 @@ package menu;
 import entity.CreditCard;
 import entity.Loan;
 import entity.Student;
+import enumerations.Bank;
 import enumerations.EducationDegree;
 import service.CreditCardService;
 import service.LoanService;
@@ -110,6 +111,21 @@ public class StudentMenu {
                 }
                 System.out.println("Invalid date!");
             }
+            System.out.println("""
+                    Select Cards Bank :
+                    1.Tejarat
+                    2.Meli
+                    3.Refah
+                    4.Maskan
+                    """);
+            int option = input.nextInt();
+            switch (option) {
+                case 1 -> creditCard.setBank(Bank.TEJARAT);
+                case 2 -> creditCard.setBank(Bank.MELI);
+                case 3 -> creditCard.setBank(Bank.REFAH);
+                case 4 -> creditCard.setBank(Bank.MASKAN);
+                default -> System.out.println("Invalid option");
+            }
             creditCard.setStudent(token);
             creditCardService.add(creditCard);
         } else {
@@ -140,18 +156,14 @@ public class StudentMenu {
     private int graduationYear(Student student, EducationDegree educationDegree) {
         int graduationYear = 0;
         switch (educationDegree) {
-            case BACHELOR_PEYVASTE, BACHELOR_NAPEYVASTE -> {
-                graduationYear = student.getYearOfEnter() + 4;
-            }
-            case ASSOCIATE, MASTER_NAPEYVASTE -> {
-                graduationYear = student.getYearOfEnter() + 2;
-            }
-            case MASTER_PEYVASTE -> {
-                graduationYear = student.getYearOfEnter() + 6;
-            }
-            case PHD_NAPEYVASTE, PHD_PEYVASTER -> {
-                graduationYear = student.getYearOfEnter() + 5;
-            }
+            case BACHELOR_PEYVASTE, BACHELOR_NAPEYVASTE -> graduationYear = student.getYearOfEnter() + 4;
+
+            case ASSOCIATE, MASTER_NAPEYVASTE -> graduationYear = student.getYearOfEnter() + 2;
+
+            case MASTER_PEYVASTE -> graduationYear = student.getYearOfEnter() + 6;
+
+            case PHD_NAPEYVASTE, PHD_PEYVASTER -> graduationYear = student.getYearOfEnter() + 5;
+
         }
         return graduationYear;
     }

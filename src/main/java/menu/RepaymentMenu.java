@@ -4,6 +4,7 @@ import entity.CreditCard;
 import entity.Installment;
 import entity.Loan;
 import entity.Student;
+import enumerations.Bank;
 import enumerations.InstallmentStatus;
 import enumerations.LoanType;
 import service.CreditCardService;
@@ -59,15 +60,12 @@ public class RepaymentMenu {
                 """);
         int option = input.nextInt();
         switch (option) {
-            case 1 -> {
-                findAndDisplayPayedInstallments(token, LoanType.EDUCATION);
-            }
-            case 2 -> {
-                findAndDisplayPayedInstallments(token, LoanType.TUITION);
-            }
-            case 3 -> {
-                findAndDisplayPayedInstallments(token, LoanType.HOUSING);
-            }
+            case 1 -> findAndDisplayPayedInstallments(token, LoanType.EDUCATION);
+
+            case 2 -> findAndDisplayPayedInstallments(token, LoanType.TUITION);
+
+            case 3 -> findAndDisplayPayedInstallments(token, LoanType.HOUSING);
+
             default -> System.out.println("Invalid option!");
         }
     }
@@ -107,6 +105,7 @@ public class RepaymentMenu {
             case 1 -> {
                 List<Loan> loans = loanService.findByStudentAndLoanType(token, LoanType.EDUCATION);
                 if (loans != null && !loans.isEmpty()) {
+                    displayUnpaidInstallments(token, LoanType.EDUCATION);
                 } else {
                     System.out.println("You dont have an active Education loan");
                 }
@@ -114,6 +113,7 @@ public class RepaymentMenu {
             case 2 -> {
                 List<Loan> loans = loanService.findByStudentAndLoanType(token, LoanType.HOUSING);
                 if (loans != null && !loans.isEmpty()) {
+                    displayUnpaidInstallments(token, LoanType.HOUSING);
                 } else {
                     System.out.println("You dont have an active Housing loan");
                 }
@@ -121,6 +121,7 @@ public class RepaymentMenu {
             case 3 -> {
                 List<Loan> loans = loanService.findByStudentAndLoanType(token, LoanType.TUITION);
                 if (loans != null && !loans.isEmpty()) {
+                    displayUnpaidInstallments(token, LoanType.TUITION);
                 } else {
                     System.out.println("You dont have an active Tuition loan");
                 }
@@ -129,11 +130,11 @@ public class RepaymentMenu {
         }
     }
 
-    private void displayUnpaidInstallments(Student token, LoanType loanType){
+    private void displayUnpaidInstallments(Student token, LoanType loanType) {
         Loan loan = loanService.findByStudentAndLoanType(token, loanType).getLast();
         if (doesLoanExist(loan)) {
-            int countOfPayed = installmentService.findInstallmentCountByLoanTypeAndPaymentStatus(loanType,InstallmentStatus.PAYED).intValue();
-            for (int i = 0; i < 60 - countOfPayed; i++){
+            int countOfPayed = installmentService.findInstallmentCountByLoanTypeAndPaymentStatus(loanType, InstallmentStatus.PAYED).intValue();
+            for (int i = 0; i < 60 - countOfPayed; i++) {
                 System.out.println(loanType.toString() + " Loan ");
                 System.out.println("Installment number : " + i);
                 LocalDate paymentDate = loginMenu.getDate();
@@ -141,21 +142,22 @@ public class RepaymentMenu {
                 System.out.println("Payment date : " + paymentDate);
 
                 double installmentAmount = 0.0;
-                if(i > 0 && i <= 12){
-                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token,loan),1);
-                }else if(i >= 13 && i <= 24){
-                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token,loan),2);
-                }else if(i >= 25 && i <= 36){
-                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token,loan),3);
-                }else if(i >= 37 && i <= 48){
-                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token,loan),4);
-                }else if(i >= 49 && i <= 60){
-                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token,loan),5);
+                if (i > 0 && i <= 12) {
+                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token, loan), 1);
+                } else if (i >= 13 && i <= 24) {
+                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token, loan), 2);
+                } else if (i >= 25 && i <= 36) {
+                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token, loan), 3);
+                } else if (i >= 37 && i <= 48) {
+                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token, loan), 4);
+                } else if (i >= 49 && i <= 60) {
+                    installmentAmount = calculateInstallmentForYear(findTotalAmount(token, loan), 5);
                 }
                 System.out.println("Installment amount : " + installmentAmount);
             }
         }
     }
+
     private void payInstallment(Scanner input, Student token) {
         System.out.println("""
                  Which loan do you want to pay ?\s
@@ -172,7 +174,7 @@ public class RepaymentMenu {
                 if (loan != null) {
                     CreditCard creditCard = getCreditCardDetail(input);
                     if (isCardValid(creditCard.getCardNumber(), creditCard.getCvv2())) {
-                        Installment installment = createInstallment(token,loan);
+                        Installment installment = createInstallment(token, loan);
                         System.out.println("You have successfully payed installment!");
                     } else {
                         System.out.println("Wrong card Number ! ");
@@ -188,7 +190,7 @@ public class RepaymentMenu {
                 if (loan != null) {
                     CreditCard creditCard = getCreditCardDetail(input);
                     if (isCardValid(creditCard.getCardNumber(), creditCard.getCvv2())) {
-                        Installment installment = createInstallment(token,loan);
+                        Installment installment = createInstallment(token, loan);
                         System.out.println("You have successfully payed installment!");
                     } else {
                         System.out.println("Wrong card Number ! ");
@@ -204,7 +206,7 @@ public class RepaymentMenu {
                 if (loan != null) {
                     CreditCard creditCard = getCreditCardDetail(input);
                     if (isCardValid(creditCard.getCardNumber(), creditCard.getCvv2())) {
-                        Installment installment = createInstallment(token,loan);
+                        Installment installment = createInstallment(token, loan);
                         System.out.println("You have successfully payed installment!");
                     } else {
                         System.out.println("Wrong card Number ! ");
@@ -217,7 +219,8 @@ public class RepaymentMenu {
             default -> System.out.println("Invalid Input ! ");
         }
     }
-    private CreditCard getCreditCardDetail(Scanner input){
+
+    private CreditCard getCreditCardDetail(Scanner input) {
         CreditCard creditCard = new CreditCard();
         while (true) {
             System.out.println("Enter Card Number : ");
@@ -239,19 +242,30 @@ public class RepaymentMenu {
             break;
         }
 
+        while (true) {
+            System.out.println("Enter expire date : ");
+            String expireDate = input.nextLine().trim();
+            String datePattern = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";
+            if (expireDate.matches(datePattern)) {
+                creditCard.setExpirationDate(expireDate);
+                break;
+            }
+            System.out.println("Invalid date!");
+        }
+
         System.out.println("Enter balance : ");
         double balance = input.nextDouble();
         creditCard.setBalance(balance);
         return creditCard;
     }
 
-    private Installment createInstallment(Student token,Loan loan){
+    private Installment createInstallment(Student token, Loan loan) {
         Installment installment = new Installment();
         installment.setLoan(loan);
         installment.setInstallmentStatus(InstallmentStatus.PAYED);
         installment.setPayedDate(LocalDate.now());
-        installment.setPaidAmount(calculateInstallmentForYear(findTotalAmount(token,loan),LocalDate.now().getYear() - loan.getYear()));
-        installment.setTotalAmount(findTotalAmount(token,loan));
+        installment.setPaidAmount(calculateInstallmentForYear(findTotalAmount(token, loan), LocalDate.now().getYear() - loan.getYear()));
+        installment.setTotalAmount(findTotalAmount(token, loan));
         installmentService.add(installment);
         return installment;
     }

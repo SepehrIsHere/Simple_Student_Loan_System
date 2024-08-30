@@ -1,7 +1,9 @@
 package entity;
 
+import enumerations.Bank;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.DefaultValue;
 import lombok.AllArgsConstructor;
@@ -39,6 +41,10 @@ public class CreditCard extends BaseEntity {
     @Column
     @NotBlank
     private String expirationDate;
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private Bank bank;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Student student;

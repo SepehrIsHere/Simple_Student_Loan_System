@@ -2,6 +2,7 @@ package entity;
 
 import enumerations.EducationDegree;
 import enumerations.EducationStatus;
+import enumerations.InstallmentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.DefaultValue;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -43,11 +45,15 @@ public class Student extends Person {
     @DefaultValue("false")
     private boolean usesDormitory;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "university_id",referencedColumnName = "id")
     private University university;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Loan> loan;
+
+    @OneToMany
+    private List<Installment> installments = new ArrayList<>();
 
     public Student(@NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String firstName, @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String lastName, @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String fathersName, @NotBlank @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Only characters and spaces allowed") @Size(min = 3, max = 20) String mothersName, @NotBlank @Size(min = 3, max = 20) String certificateNumber, @NotBlank Integer nationalCode, @NotBlank @Size(min = 4, max = 7) String birthDate, @NotBlank @Size(min = 4, max = 20) String username, @NotBlank @Size(min = 8, max = 20) String password, boolean isEngaged ,Integer studentId, Integer yearOfEnter, EducationDegree educationDegree, EducationStatus educationStatus, boolean usesDormitory,University university) {
         super(firstName, lastName, fathersName, mothersName, certificateNumber, nationalCode, birthDate, username, password,isEngaged);
