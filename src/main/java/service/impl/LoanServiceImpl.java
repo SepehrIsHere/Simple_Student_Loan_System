@@ -2,15 +2,19 @@ package service.impl;
 
 import entity.Loan;
 import entity.Student;
+import enumerations.EducationDegree;
 import enumerations.LoanType;
 import repository.LoanRepository;
 import service.LoanService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
+    private final AtomicInteger loanNumberCounter = new AtomicInteger(1000);
 
     public LoanServiceImpl(LoanRepository loanRepository) {
         this.loanRepository = loanRepository;
@@ -19,10 +23,15 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public void add(Loan loan) {
         try {
+            loan.setLoanNumber(generateUniqueLoanNumber());
             loanRepository.add(loan);
         } catch (Exception e) {
             System.out.println("An error occured while adding a loan" + e.getMessage());
         }
+    }
+
+    private Integer generateUniqueLoanNumber() {
+        return loanNumberCounter.incrementAndGet();
     }
 
     @Override
@@ -83,11 +92,10 @@ public class LoanServiceImpl implements LoanService {
         return null;
     }
 
-
     @Override
-    public List<Loan> findByStudentAndTypeAndYear(Student student, LoanType type, Integer year) {
+    public Loan findByStudentAndLoanNumberAndType(Student student, Integer loanNumber, LoanType loanType) {
         try {
-            return loanRepository.findByStudentAndTypeAndYear(student, type, year);
+           return loanRepository.findByStudentAndLoanNumberAndType(student, loanNumber, loanType);
         } catch (Exception e) {
             System.out.println("An error occured while finding the loan " + e.getMessage());
             e.printStackTrace();
@@ -96,23 +104,48 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public Loan findByStudentMonthYearAndType(Student student, LoanType type, Integer month, Integer year) {
+    public Long countLoanByStudentAndMonthAndYearAndType(Student student, Integer month, Integer year, LoanType loanType) {
         try {
-            return loanRepository.findByStudentMonthYearAndType(student, type, month, year);
+            return loanRepository.countLoanByStudentAndMonthAndYearAndType(student, month, year, loanType);
         } catch (Exception e) {
-            System.out.println("An error occured while finding loan " + e.getMessage());
+            System.out.println("An error occured while counting loan " + e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public Loan findByStudentAndLoanTypeAndYear(Student student, LoanType type, Integer year) {
+    public Long countHousingLoanByStudentAndEducationDegree(Student student, EducationDegree educationDegree, LoanType loanType) {
         try {
-            return loanRepository.findByStudentAndLoanTypeAndYear(student, type, year);
+            return loanRepository.countHousingLoanByStudentAndEducationDegree(student, educationDegree, loanType);
         } catch (Exception e) {
-            System.out.println("An error occured while finding the loan " + e.getMessage());
+            System.out.println("An error occured while counting loan " + e.getMessage());
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Loan displayAndChooseLoan(Scanner input, Student student, List<Loan> loans, LoanType loanType) {
+        if (loans != null && !loans.isEmpty()) {
+            for (Loan loan : loans) {
+                System.out.println("Loan Number : " + loan.getLoanNumber());
+                System.out.println("Loan Amount : " + loan.getAmount());
+                System.out.println("Loan taken at : " + loan.getDate());
+            }
+
+            while (true) {
+                System.out.println("Enter the loan number to select the one : ");
+                int loanNumber = input.nextInt();
+                Loan loan = findByStudentAndLoanNumberAndType(student, loanNumber, loanType);
+                if (loan != null) {
+                    return loan;
+                } else {
+                    System.out.println("Invalid Input ! ");
+                }
+            }
+        } else {
+            System.out.println("You dont have a loan !");
         }
         return null;
     }

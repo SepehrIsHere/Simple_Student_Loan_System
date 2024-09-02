@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -25,7 +27,7 @@ public class Loan extends BaseEntity {
     @Column
     @NotBlank
     @Size(min = 4, max = 25)
-    private Double amount;
+    private double amount;
 
     @Column
     @NotBlank
@@ -44,9 +46,9 @@ public class Loan extends BaseEntity {
     @Column
     private Integer month;
 
-    @Column
-    @NotNull
-    private String loanNumber;
+
+    @Column(unique = true, nullable = false)
+    private Integer loanNumber;
 
     @NotBlank
     @ManyToOne(cascade = CascadeType.ALL)

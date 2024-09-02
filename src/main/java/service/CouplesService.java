@@ -17,4 +17,6 @@ public interface CouplesService {
     Couples findById(Long id);
 
     Couples findByFirstStudentAndSecondStudent(Student firstStudent, Student secondStudent);
+
+    void addCouplesIfDoesNotExist(Couples couples);
 }

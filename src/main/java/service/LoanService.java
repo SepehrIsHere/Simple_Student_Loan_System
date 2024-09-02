@@ -2,10 +2,12 @@ package service;
 
 import entity.Loan;
 import entity.Student;
+import enumerations.EducationDegree;
 import enumerations.LoanType;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 public interface LoanService {
     void add(Loan loan);
@@ -22,10 +24,12 @@ public interface LoanService {
 
     List<Loan> findByStudentAndLoanType(Student student, LoanType type);
 
-    List<Loan> findByStudentAndTypeAndYear(Student student, LoanType type, Integer year);
+    Loan findByStudentAndLoanNumberAndType(Student student, Integer loanNumber, LoanType loanType);
 
-    Loan findByStudentMonthYearAndType(Student student, LoanType type, Integer month, Integer year);
+    Long countLoanByStudentAndMonthAndYearAndType(Student student, Integer month, Integer year, LoanType loanType);
 
-    Loan findByStudentAndLoanTypeAndYear(Student student, LoanType type, Integer year);
+    Long countHousingLoanByStudentAndEducationDegree(Student student, EducationDegree educationDegree, LoanType loanType);
+
+    Loan displayAndChooseLoan(Scanner input, Student student, List<Loan> loans, LoanType loanType);
 
 }

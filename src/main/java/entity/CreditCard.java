@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class CreditCard extends BaseEntity {
     @NotBlank
     @DefaultValue("0")
     @Size(min = 1, max = 15)
-    private Double balance;
+    private double balance;
 
     @Column
     @NotBlank

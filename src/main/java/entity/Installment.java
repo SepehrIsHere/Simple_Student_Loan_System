@@ -24,11 +24,11 @@ public class Installment extends BaseEntity {
 
     @Column
     @NotNull
-    private Double totalAmount;
+    private double totalAmount;
 
     @Column
     @NotNull
-    private Double paidAmount;
+    private double paidAmount;
 
     @Column(name = "installment_number")
     @NotNull

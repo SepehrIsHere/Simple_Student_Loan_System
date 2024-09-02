@@ -2,6 +2,7 @@ package service.impl;
 
 import entity.Couples;
 import entity.Student;
+import jakarta.persistence.NoResultException;
 import repository.CouplesRepository;
 import service.CouplesService;
 
@@ -69,10 +70,24 @@ public class CouplesServiceImpl implements CouplesService {
     public Couples findByFirstStudentAndSecondStudent(Student firstStudent, Student secondStudent) {
         try {
             return couplesRepository.findByFirstStudentAndSecondStudent(firstStudent, secondStudent);
-        } catch (Exception e) {
+        } catch (NoResultException e) {
             System.out.println("An error occured while finding couples" + e.getMessage());
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void addCouplesIfDoesNotExist(Couples couples) {
+        try {
+            if (couplesRepository.findByFirstStudentAndSecondStudent(couples.getFirstStudent(), couples.getSecondStudent()) == null) {
+                couplesRepository.add(couples);
+            } else {
+                System.out.println("Couples already exist");
+            }
+        } catch (NoResultException e) {
+            System.out.println("Couples does not already exist ! ");
+            couplesRepository.add(couples);
+        }
     }
 }
