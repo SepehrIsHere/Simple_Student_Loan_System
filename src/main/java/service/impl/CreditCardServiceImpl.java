@@ -70,56 +70,63 @@ public class CreditCardServiceImpl implements CreditCardService {
             return creditCardRepository.findByCardNumberAndCvv2(cardNumber, cvv2);
         } catch (NullPointerException e) {
             System.out.println("Credit card does not exist or something went wrong " + e.getMessage());
-            e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public CreditCard getCreditCardDetail(Scanner input) {
-        CreditCard creditCard = new CreditCard();
+    public CreditCard getCreditCardDetail(Scanner input, Student student) {
+        String cardNumber;
         while (true) {
             System.out.println("Enter Card Number : ");
-            String cardNumber = input.nextLine().trim();
+            cardNumber = input.nextLine();
             if (cardNumber.matches("^\\d{12,16}$")) {
-                creditCard.setCardNumber(cardNumber);
                 break;
             }
             System.out.println("Invalid input!. input must be digits and between 12 to 16");
         }
-
+        int cvv2;
         while (true) {
             System.out.println("Enter CVV2 : ");
-            int cvv2 = input.nextInt();
-            if (!((cvv2 > 4) || (cvv2 < 3))) {
-                System.out.println("Invalid input! cvv2 must be between 3 to 4 digits");
+            cvv2 = input.nextInt();
+            String stringedCvv2 = Integer.toString(cvv2);
+            if ((!(stringedCvv2.length() > 4)) && (stringedCvv2.length() >= 3)) {
+                break;
             }
-            creditCard.setCvv2(cvv2);
-            break;
+            System.out.println("Invalid input! cvv2 must be between 3 to 4 digits");
         }
 
+        String expireDate;
         while (true) {
             System.out.println("Enter expire date : ");
-            String expireDate = input.nextLine().trim();
+            input.nextLine();
+            expireDate = input.nextLine();
             String datePattern = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$";
             if (expireDate.matches(datePattern)) {
-                creditCard.setExpirationDate(expireDate);
                 break;
             }
             System.out.println("Invalid date!");
         }
-
-        System.out.println("Enter balance : ");
-        double balance = input.nextDouble();
-        creditCard.setBalance(balance);
-        return creditCard;
+        CreditCard creditCard = findByCardNumberAndCvv2(cardNumber,cvv2);
+        if(creditCard != null) {
+           if(creditCard.equals(student.getCreditCard())){
+               return creditCard;
+           }else{
+               System.out.println("Card does not match");
+           }
+        }
+        System.out.println("Card does not exist ");
+        return null;
     }
 
     @Override
     public void updateCardBalance(CreditCard creditCard, Loan loan) {
-        CreditCard studentsCard = findByCardNumberAndCvv2(creditCard.getCardNumber(), creditCard.getCvv2());
-        studentsCard.setBalance(studentsCard.getBalance() + (loan.getAmount()));
-        update(studentsCard);
+        if (creditCard != null) {
+            creditCard.setBalance(creditCard.getBalance() + (loan.getAmount()));
+            update(creditCard);
+        }else{
+            System.out.println("Card dosesnt exist !");
+        }
     }
 
     @Override
@@ -183,3 +190,4 @@ public class CreditCardServiceImpl implements CreditCardService {
         return student.getCreditCard() != null;
     }
 }
+

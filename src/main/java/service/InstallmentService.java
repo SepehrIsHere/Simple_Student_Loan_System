@@ -25,17 +25,23 @@ public interface InstallmentService {
 
     Long findInstallmentCountByLoanTypeAndPaymentStatus(LoanType loanType, InstallmentStatus installmentStatus);
 
-    double getEducationLoanAmount(Student student);
+    long getEducationLoanAmount(Student student);
 
-    double getTuitionLoanAmount(Student student);
+    long getTuitionLoanAmount(Student student);
 
-    double getHousingLoanAmount(Student student);
+    long getHousingLoanAmount(Student student);
 
-    double calculateInstallmentForYear(int year, double baseInstallmentAmount);
+    long getBaseEducationLoanAmount(Student student);
 
-    double findTotalAmount(Student student, Loan loan);
+    long getBaseTuitionLoanAmount(Student student);
 
-    Installment createInstallment(Student student, Loan loan, double paidAmount, LocalDate payedDate);
+    long getBaseHousingLoanAmount(Student student);
+
+    long calculateInstallmentForYear(int year, long baseInstallmentAmount);
+
+    long findTotalAmount(Student student, Loan loan);
+
+    Installment createInstallment(Student student, Loan loan, long paidAmount, LocalDate payedDate);
 
     int graduationYear(Student student, EducationDegree educationDegree);
 }

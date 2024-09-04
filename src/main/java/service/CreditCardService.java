@@ -21,7 +21,7 @@ public interface CreditCardService {
 
     CreditCard findByCardNumberAndCvv2(String cardNumber, Integer cvv2);
 
-    CreditCard getCreditCardDetail(Scanner input);
+    CreditCard getCreditCardDetail(Scanner input,Student student);
 
     void updateCardBalance(CreditCard creditCard, Loan loan);
 

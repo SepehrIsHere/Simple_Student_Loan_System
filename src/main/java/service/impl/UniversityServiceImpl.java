@@ -1,6 +1,8 @@
 package service.impl;
 
 import entity.University;
+import enumerations.UniversityType;
+import jakarta.persistence.NoResultException;
 import repository.UniversityRepository;
 import service.UniversityService;
 
@@ -66,6 +68,16 @@ public class UniversityServiceImpl implements UniversityService {
             return universityRepository.findAll();
         } catch (Exception e) {
             System.out.println("An error occured while finding university" + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public University findByNameAndUniversityType(String universityName, UniversityType universityType) {
+        try {
+            return universityRepository.findByNameAndUniversityType(universityName, universityType);
+        } catch (NoResultException e) {
+            System.out.println("An error occured while finding university " + e.getMessage());
         }
         return null;
     }

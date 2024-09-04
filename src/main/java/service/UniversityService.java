@@ -1,6 +1,7 @@
 package service;
 
 import entity.University;
+import enumerations.UniversityType;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UniversityService {
     University findByName(String name);
 
     List<University> findAll();
+
+    University findByNameAndUniversityType(String universityName, UniversityType universityType);
 }

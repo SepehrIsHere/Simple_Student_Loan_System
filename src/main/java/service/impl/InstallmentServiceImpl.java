@@ -9,13 +9,11 @@ import enumerations.LoanType;
 import repository.InstallmentRepository;
 import service.InstallmentService;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
 
 public class InstallmentServiceImpl implements InstallmentService {
-    DecimalFormat tomanFormat = new DecimalFormat("#,###");
     private final double INTEREST_RATE = 0.04;
     private final InstallmentRepository installmentRepository;
 
@@ -91,67 +89,72 @@ public class InstallmentServiceImpl implements InstallmentService {
     }
 
     @Override
-    public double getEducationLoanAmount(Student student) {
+    public long getEducationLoanAmount(Student student) {
         double loanAmount;
         switch (student.getEducationDegree()) {
-            case ASSOCIATE, BACHELOR_PEYVASTE, BACHELOR_NAPEYVASTE -> loanAmount = 1900000.0 * (1 + INTEREST_RATE);
-            case MASTER_PEYVASTE, MASTER_NAPEYVASTE, PHD_PEYVASTER -> loanAmount = 2250000.0 * (1 + INTEREST_RATE);
-            case PHD_NAPEYVASTE -> loanAmount = 2600000.0 * (1 + INTEREST_RATE);
-            default -> loanAmount = 0.0;
+            case ASSOCIATE, BACHELOR_PEYVASTE, BACHELOR_NAPEYVASTE -> loanAmount = 1900000 + (1900000 * INTEREST_RATE);
+            case MASTER_PEYVASTE, MASTER_NAPEYVASTE, PHD_PEYVASTER -> loanAmount = 2250000 + (2250000 * INTEREST_RATE);
+            case PHD_NAPEYVASTE -> loanAmount = 2600000 + (2600000 * INTEREST_RATE);
+            default -> loanAmount = 0;
         }
-        return Double.parseDouble(tomanFormat.format(loanAmount));
+        return (long) loanAmount;
     }
 
     // Method to calculate the tuition loan amount including 4% interest
     @Override
-    public double getTuitionLoanAmount(Student student) {
+    public long getTuitionLoanAmount(Student student) {
         double loanAmount;
         switch (student.getEducationDegree()) {
-            case ASSOCIATE, BACHELOR_PEYVASTE, BACHELOR_NAPEYVASTE -> loanAmount = 1300000.0 * (1 + INTEREST_RATE);
-            case MASTER_PEYVASTE, MASTER_NAPEYVASTE, PHD_PEYVASTER -> loanAmount = 2600000.0 * (1 + INTEREST_RATE);
-            case PHD_NAPEYVASTE -> loanAmount = 65000000.0 * (1 + INTEREST_RATE);
-            default -> loanAmount = 0.0;
+            case ASSOCIATE, BACHELOR_PEYVASTE, BACHELOR_NAPEYVASTE -> loanAmount = 1300000 + (1300000 * INTEREST_RATE);
+            case MASTER_PEYVASTE, MASTER_NAPEYVASTE, PHD_PEYVASTER -> loanAmount = 2600000 + (2600000 * INTEREST_RATE);
+            case PHD_NAPEYVASTE -> loanAmount = 65000000 + (65000000 * INTEREST_RATE);
+            default -> loanAmount = 0;
         }
-        return Double.parseDouble(tomanFormat.format(loanAmount));
+        return (long) loanAmount;
     }
 
     // Method to calculate the housing loan amount including 4% interest
     @Override
-    public double getHousingLoanAmount(Student student) {
+    public long getHousingLoanAmount(Student student) {
         double loanAmount;
         switch (student.getUniversity().getMetropolis()) {
-            case TEHRAN -> loanAmount = 32000000.0 * (1 + INTEREST_RATE);
+            case TEHRAN -> loanAmount = 32000000 * (32000000 * INTEREST_RATE);
             case ALBORZ, AZARBAYEJAN_SHARQI, ESFEHAN, FARS, GILLAN, QOM, KHOOZESTAN, KHORASAN_RAZAVI ->
-                    loanAmount = 26000000.0 * (1 + INTEREST_RATE);
-            default -> loanAmount = 19500000.0 * (1 + INTEREST_RATE);
+                    loanAmount = 26000000 + (26000000 * INTEREST_RATE);
+            default -> loanAmount = 19500000 + (19500000 * INTEREST_RATE);
         }
-        return Double.parseDouble(tomanFormat.format(loanAmount));
-    }
-
-    public double getBaseEducationLoanAmount(Student student) {
-        double loanAmount = getEducationLoanAmount(student);
-        return loanAmount / (1 + INTEREST_RATE);
-    }
-
-    public double getBaseTuitionLoanAmount(Student student) {
-        double loanAmount = getTuitionLoanAmount(student);
-        return loanAmount / (1 + INTEREST_RATE);
-    }
-
-    public double getBaseHousingLoanAmount(Student student) {
-        double loanAmount = getHousingLoanAmount(student);
-        return loanAmount / (1 + INTEREST_RATE);
+        return (long) loanAmount;
     }
 
     @Override
-    public double calculateInstallmentForYear(int year, double baseInstallmentAmount) {
-        if (year < 1 || year > 5) {
-            throw new IllegalArgumentException("Year must be between 1 and 5.");
-        }
-        double yearlyMultiplier = Math.pow(2, year - 1);
-        double installmentAmount = baseInstallmentAmount * yearlyMultiplier;
+    public long getBaseEducationLoanAmount(Student student) {
+        long loanAmount = getEducationLoanAmount(student);
+        return loanAmount / 60;
+    }
 
-        return Double.parseDouble(tomanFormat.format(installmentAmount));
+    @Override
+    public long getBaseTuitionLoanAmount(Student student) {
+        long loanAmount = getTuitionLoanAmount(student);
+        return loanAmount / 60;
+    }
+
+    @Override
+    public long getBaseHousingLoanAmount(Student student) {
+        long loanAmount = getHousingLoanAmount(student);
+        return loanAmount / 60;
+    }
+
+    @Override
+    public long calculateInstallmentForYear(int year, long baseInstallmentAmount) {
+        long installmentForYear = 0;
+        switch(year){
+            case 1 -> installmentForYear = baseInstallmentAmount;
+            case 2 -> installmentForYear = baseInstallmentAmount * 2;
+            case 3 -> installmentForYear = baseInstallmentAmount * 4;
+            case 4 -> installmentForYear = baseInstallmentAmount * 8;
+            case 5 -> installmentForYear = baseInstallmentAmount * 16;
+        }
+        return installmentForYear;
     }
 
     @Override
@@ -171,23 +174,19 @@ public class InstallmentServiceImpl implements InstallmentService {
     }
 
     @Override
-    public double findTotalAmount(Student student, Loan loan) {
-        double totalAmount;
+    public long findTotalAmount(Student student, Loan loan) {
+        long totalAmount;
         switch (loan.getLoanType()) {
-            case EDUCATION ->
-                    totalAmount = getEducationLoanAmount(student);
-            case TUITION ->
-                    totalAmount = getTuitionLoanAmount(student);
-            case HOUSING ->
-                    totalAmount = getHousingLoanAmount(student);
-            default -> totalAmount = 0.0;
+            case EDUCATION -> totalAmount = getEducationLoanAmount(student);
+            case TUITION -> totalAmount = getTuitionLoanAmount(student);
+            case HOUSING -> totalAmount = getHousingLoanAmount(student);
+            default -> totalAmount = 0;
         }
-        tomanFormat.format(totalAmount);
         return totalAmount;
     }
 
     @Override
-    public Installment createInstallment(Student student, Loan loan,double paidAmount,LocalDate payedDate) {
+    public Installment createInstallment(Student student, Loan loan, long paidAmount, LocalDate payedDate) {
         Installment installment = new Installment();
         installment.setLoan(loan);
         installment.setInstallmentStatus(InstallmentStatus.PAYED);

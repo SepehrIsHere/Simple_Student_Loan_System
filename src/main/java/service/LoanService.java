@@ -24,8 +24,6 @@ public interface LoanService {
 
     List<Loan> findByStudentAndLoanType(Student student, LoanType type);
 
-    Loan findByStudentAndLoanNumberAndType(Student student, Integer loanNumber, LoanType loanType);
-
     Long countLoanByStudentAndMonthAndYearAndType(Student student, Integer month, Integer year, LoanType loanType);
 
     Long countHousingLoanByStudentAndEducationDegree(Student student, EducationDegree educationDegree, LoanType loanType);
