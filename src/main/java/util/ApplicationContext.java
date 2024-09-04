@@ -87,9 +87,9 @@ public class ApplicationContext {
 
 
         loginMenu = new LoginMenu(studentService, universityService);
-        repaymentMenu = new RepaymentMenu(loginMenu,loanService,creditCardService,installmentService);
-        loanMenu = new LoanMenu(loanService, creditCardService, studentService, couplesService,loginMenu);
-        studentMenu = new StudentMenu( creditCardService,  repaymentMenu,  loanMenu,  loginMenu,  loanService);
+        repaymentMenu = new RepaymentMenu(loanService, creditCardService, installmentService,loginMenu);
+        loanMenu = new LoanMenu(loanService, creditCardService, studentService, couplesService, loginMenu, installmentService);
+        studentMenu = new StudentMenu(creditCardService, repaymentMenu, loanMenu, loginMenu, loanService, installmentService);
         mainMenu = new MainMenu(loginMenu, studentMenu);
     }
 
