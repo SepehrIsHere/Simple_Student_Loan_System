@@ -28,7 +28,7 @@ public class Installment extends BaseEntity {
 
     @Column
     @NotNull
-    private double paidAmount;
+    private long paidAmount;
 
     @Column(name = "installment_number")
     @NotNull

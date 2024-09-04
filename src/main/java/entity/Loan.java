@@ -46,10 +46,6 @@ public class Loan extends BaseEntity {
     @Column
     private Integer month;
 
-
-    @Column(unique = true, nullable = false)
-    private Integer loanNumber;
-
     @NotBlank
     @ManyToOne(cascade = CascadeType.ALL)
     private Student student;

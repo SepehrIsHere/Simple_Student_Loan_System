@@ -4,6 +4,7 @@ import entity.Student;
 import entity.University;
 import enumerations.EducationDegree;
 import enumerations.EducationStatus;
+import enumerations.UniversityType;
 import lombok.Getter;
 import service.StudentService;
 import service.UniversityService;
@@ -57,40 +58,49 @@ public class LoginMenu {
     }
 
     public void showMenu() {
-        Scanner input = new Scanner(System.in);
-        boolean continueRunning = true;
-        while (continueRunning) {
-            System.out.println("""
-                    Student Loan System
-                    1.SignUp
-                    2.Login
-                    3.Exit
-                    """);
-            int option = input.nextInt();
-            input.nextLine();
-            switch (option) {
-                case 1 -> continueRunning = !signUp(input);
-                case 2 -> continueRunning = !login(input);
-                case 3 -> {
-                    token = null;
-                    continueRunning = false;
+        try {
+            Scanner input = new Scanner(System.in);
+            boolean continueRunning = true;
+            while (continueRunning) {
+                System.out.println("""
+                        Student Loan System
+                        1.SignUp
+                        2.Login
+                        3.Exit
+                        """);
+                int option = input.nextInt();
+                input.nextLine();
+                switch (option) {
+                    case 1 -> continueRunning = !signUp(input);
+                    case 2 -> continueRunning = !login(input);
+                    case 3 -> {
+                        token = null;
+                        continueRunning = false;
+                    }
                 }
             }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input ! Please try again.");
         }
     }
 
     private boolean login(Scanner input) {
-        System.out.println("Enter username: ");
-        String username = input.nextLine();
-        System.out.println("Enter password: ");
-        String password = input.nextLine();
+        try {
+            System.out.println("Enter username: ");
+            String username = input.nextLine().trim();
+            System.out.println("Enter password: ");
+            String password = input.nextLine().trim();
 
-        token = studentService.login(username, password);
-        if (token == null || token.getId() == null) {
-            System.out.println("Invalid username or password");
-            return false;
+            token = studentService.login(username, password);
+            if (token == null || token.getId() == null) {
+                System.out.println("Invalid username or password");
+                return false;
+            }
+            return true;
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid username or password. Please try again.");
         }
-        return true;
+        return false;
     }
 
     private boolean signUp(Scanner input) {
@@ -98,7 +108,7 @@ public class LoginMenu {
             Student student = new Student();
             while (true) {
                 System.out.println("Enter first name : ");
-                String firstName = input.nextLine().trim();
+                String firstName = input.nextLine().trim().toLowerCase();
 
                 if (firstName.matches("^[a-zA-Z\\s]{2,30}$")) {
                     student.setFirstName(firstName);
@@ -109,7 +119,7 @@ public class LoginMenu {
 
             while (true) {
                 System.out.println("Enter last name : ");
-                String lastName = input.nextLine();
+                String lastName = input.nextLine().trim().toLowerCase();
                 if (lastName.matches("^[a-zA-Z\\s]{2,30}$")) {
                     student.setLastName(lastName);
                     break;
@@ -119,7 +129,7 @@ public class LoginMenu {
 
             while (true) {
                 System.out.println("Enter father's name : ");
-                String fatherName = input.nextLine();
+                String fatherName = input.nextLine().trim().toLowerCase();
                 if (fatherName.matches("^[a-zA-Z\\s]{2,30}$")) {
                     student.setFathersName(fatherName);
                     break;
@@ -129,7 +139,7 @@ public class LoginMenu {
 
             while (true) {
                 System.out.println("Enter mother's name : ");
-                String motherName = input.nextLine();
+                String motherName = input.nextLine().trim().toLowerCase();
                 if (motherName.matches("^[a-zA-Z\\s]{2,30}$")) {
                     student.setMothersName(motherName);
                     break;
@@ -139,7 +149,7 @@ public class LoginMenu {
 
             while (true) {
                 System.out.println("Enter certificate Number : ");
-                String certificateNumber = input.nextLine().trim();
+                String certificateNumber = input.nextLine().trim().toLowerCase();
                 if (certificateNumber.matches("^[a-zA-Z0-9]+$")) {
                     student.setCertificateNumber(certificateNumber);
                     break;
@@ -157,20 +167,6 @@ public class LoginMenu {
 
             }
 
-            while (true) {
-                System.out.println("Enter Gender : ");
-                Character gender = input.next().charAt(0);
-                if (gender.toString().equalsIgnoreCase("m")) {
-                    gender = 'm';
-                    student.setGender(gender);
-                    break;
-                } else if (gender.toString().equalsIgnoreCase("f")) {
-                    gender = 'f';
-                    student.setGender(gender);
-                    break;
-                }
-                System.out.println("Invalid input . For male enter (m) and for female enter (f)");
-            }
             input.nextLine();
             while (true) {
                 System.out.println("Enter birthDate (format: DD-MM-YYYY): ");
@@ -182,6 +178,20 @@ public class LoginMenu {
                 System.out.println("Invalid input. Birth date must be in format DD-MM-YYYY (Iranian calendar).");
             }
 
+            while (true) {
+                System.out.println("Enter Gender : ");
+                char gender = input.next().charAt(0);
+                if (Character.toString(gender).equalsIgnoreCase("m")) {
+                    gender = 'm';
+                    student.setGender(gender);
+                    break;
+                } else if (Character.toString(gender).equalsIgnoreCase("f")) {
+                    gender = 'f';
+                    student.setGender(gender);
+                    break;
+                }
+                System.out.println("Invalid input . For male enter (m) and for female enter (f)");
+            }
 
             System.out.println("Enter student Id : ");
             Integer studentId = input.nextInt();
@@ -217,41 +227,57 @@ public class LoginMenu {
                 default -> System.out.println("Invalid choice");
             }
 
-            System.out.println("""
-                    What is your educational Status ?
-                    1.Graduated
-                    2.Not Graduated
-                    """);
-            choice = input.nextInt();
-            input.nextLine();
-
-            switch (choice) {
-                case 1 -> student.setEducationStatus(EducationStatus.GRADUATED);
-                case 2 -> student.setEducationStatus(EducationStatus.NOT_GRADUATED);
-                default -> System.out.println("Invalid choice");
-            }
 
             System.out.println("Are you engaged ? ");
-            String answer = input.nextLine();
-            student.setEngaged(answer.equalsIgnoreCase("Yes"));
+            String answer = input.nextLine().trim().toLowerCase();
+            student.setEngaged(answer.equalsIgnoreCase("yes"));
 
             System.out.println("Do you use Dormitory ? ");
-            answer = input.nextLine();
-            student.setUsesDormitory(answer.equalsIgnoreCase("Yes"));
+            answer = input.nextLine().trim().toLowerCase();
+            student.setUsesDormitory(answer.equalsIgnoreCase("yes"));
 
-            System.out.println("Enter the name of university : ");
-            String universityName = input.nextLine();
-            University university = universityService.findByName(universityName);
-            if (university == null) {
-
+            University university = new University();
+            while (true) {
+                System.out.println("Enter the name of university : ");
+                String universityName = input.nextLine().toLowerCase();
+                assert university != null;
+                university.setName(universityName);
+                System.out.println("""
+                        Select Type of University
+                        1.AZAD
+                        2.DOLATI_SHABANE
+                        3.DOLATI_ROOZANE
+                        4.PAYAMNOOR
+                        5.PARDIS
+                        6.ZARFIAT_MAZAD
+                        7.ELMI_KRABORDI
+                        8.QEIR_ENTEFAHI
+                        """);
+                choice = input.nextInt();
+                switch (choice) {
+                    case 1 -> university.setUniversityType(UniversityType.AZAD);
+                    case 2 -> university.setUniversityType(UniversityType.DOLATI_SHABANE);
+                    case 3 -> university.setUniversityType(UniversityType.DOLATI_ROOZANE);
+                    case 4 -> university.setUniversityType(UniversityType.PAYAMNOOR);
+                    case 5 -> university.setUniversityType(UniversityType.PARDIS);
+                    case 6 -> university.setUniversityType(UniversityType.ZARFIAT_MAZAD);
+                    case 7 -> university.setUniversityType(UniversityType.ELMI_KARBORDI);
+                    case 8 -> university.setUniversityType(UniversityType.QEIR_ENTEFAHI);
+                }
+                university = universityService.findByNameAndUniversityType(universityName, university.getUniversityType());
+                if (university != null) {
+                    student.setUniversity(university);
+                    break;
+                }
+                System.out.println("University dosent exist ! ");
             }
-            student.setUniversity(university);
 
+            input.nextLine();
 
             String password = new PassGenerator().generatePassword();
             student.setPassword(password);
             assert nationalCode != null;
-            String username = nationalCode.toString();
+            String username = Integer.toString(nationalCode);
             student.setUsername(username);
             if (doesStudentAlreadyExist(student)) {
                 System.out.println("Student Already exists");
@@ -272,12 +298,8 @@ public class LoginMenu {
     private boolean doesStudentAlreadyExist(Student student) {
         List<Student> students = studentService.findAll();
         for (Student s : students) {
-            if (s.getFirstName().equals(student.getFirstName()) && s.getLastName().equals(student.getLastName()) && s.getNationalCode().equals(student.getNationalCode()) ||
-                    s.getFirstName().equals(student.getFirstName()) && s.getLastName().equals(student.getLastName())) {
-                return true;
-            } else {
-                return false;
-            }
+            return s.getFirstName().equals(student.getFirstName()) && s.getLastName().equals(student.getLastName()) && s.getNationalCode().equals(student.getNationalCode()) ||
+                    s.getFirstName().equals(student.getFirstName()) && s.getLastName().equals(student.getLastName());
         }
         return false;
     }

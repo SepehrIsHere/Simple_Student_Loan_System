@@ -29,5 +29,4 @@ public interface LoanService {
     Long countHousingLoanByStudentAndEducationDegree(Student student, EducationDegree educationDegree, LoanType loanType);
 
     Loan displayAndChooseLoan(Scanner input, Student student, List<Loan> loans, LoanType loanType);
-
 }

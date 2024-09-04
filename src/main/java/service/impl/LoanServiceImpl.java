@@ -9,7 +9,6 @@ import service.LoanService;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
@@ -130,4 +129,6 @@ public class LoanServiceImpl implements LoanService {
         }
         return null;
     }
+
+
 }
