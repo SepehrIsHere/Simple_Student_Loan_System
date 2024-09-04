@@ -1,13 +1,21 @@
 package entity;
 
+import enumerations.LoanStatus;
 import enumerations.LoanType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jdk.jfr.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
 
 
 @AllArgsConstructor
@@ -19,13 +27,26 @@ public class Loan extends BaseEntity {
     @Column
     @NotBlank
     @Size(min = 4, max = 25)
-    private Double amount;
+    private double amount;
 
     @Column
+    @NotBlank
     @Enumerated(EnumType.STRING)
     private LoanType loanType;
 
+    @NotNull
     @Column
-    @OneToOne
+    private LocalDate date;
+
+    @NotNull
+    @Column
+    private Integer year;
+
+    @NotNull
+    @Column
+    private Integer month;
+
+    @NotBlank
+    @ManyToOne(cascade = CascadeType.ALL)
     private Student student;
 }
