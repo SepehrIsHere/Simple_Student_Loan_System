@@ -1,6 +1,7 @@
 package repository;
 
 import entity.University;
+import enumerations.UniversityType;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface UniversityRepository extends BaseEntityRepository<University> {
 
     List<University> findAll();
 
+    University findByNameAndUniversityType(String universityName, UniversityType universityType);
 }

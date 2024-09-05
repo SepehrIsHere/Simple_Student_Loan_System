@@ -1,6 +1,7 @@
 package repository.impl;
 
 import entity.University;
+import enumerations.UniversityType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import repository.UniversityRepository;
@@ -31,5 +32,13 @@ public class UniversityRepositoryImpl<T extends University> extends BaseEntityRe
     public List<University> findAll() {
         TypedQuery<University> query = em.createQuery("SELECT u FROM University u", University.class);
         return query.getResultList();
+    }
+
+    @Override
+    public University findByNameAndUniversityType(String universityName, UniversityType universityType) {
+        TypedQuery<University> query = em.createQuery("SELECT u FROM University u WHERE u.name = :name AND u.universityType = :universityType", University.class);
+        query.setParameter("name", universityName);
+        query.setParameter("universityType", universityType);
+        return query.getSingleResult();
     }
 }
